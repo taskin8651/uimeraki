@@ -221,6 +221,77 @@
     </div>
 @endcan
 
+
+{{-- CAPABILITY MANAGEMENT GROUP --}}
+@can('capability_management_access')
+    @php
+        $capabilityActive = request()->is('admin/capability-pages*')
+            || request()->is('admin/capabilities*')
+            || request()->is('admin/capability-specs*')
+            || request()->is('admin/capability-processes*');
+    @endphp
+
+    <div x-data="{ open: {{ $capabilityActive ? 'true' : 'false' }} }">
+
+        <button type="button"
+                @click="open = !open"
+                data-tooltip="Capabilities"
+                class="nav-link nav-group-btn {{ $capabilityActive ? 'active' : '' }}">
+
+            <div class="nav-group-left">
+                <i class="fas fa-industry nav-icon"></i>
+                <span class="nav-label">Capability Management</span>
+            </div>
+
+            <i class="fas fa-chevron-right chevron"
+               :style="open ? 'transform:rotate(90deg)' : ''"></i>
+        </button>
+
+        <div class="submenu"
+             x-show="open"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-1"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-1">
+
+            @can('capability_page_access')
+                <a href="{{ route('admin.capability-pages.index') }}"
+                   class="sub-link {{ request()->is('admin/capability-pages*') ? 'active' : '' }}">
+                    <i class="fas fa-file-alt"></i>
+                    Capability Page
+                </a>
+            @endcan
+
+            @can('capability_access')
+                <a href="{{ route('admin.capabilities.index') }}"
+                   class="sub-link {{ request()->is('admin/capabilities*') && !request()->is('admin/capability-pages*') ? 'active' : '' }}">
+                    <i class="fas fa-cogs"></i>
+                    Capabilities
+                </a>
+            @endcan
+
+            @can('capability_spec_access')
+                <a href="{{ route('admin.capability-specs.index') }}"
+                   class="sub-link {{ request()->is('admin/capability-specs*') ? 'active' : '' }}">
+                    <i class="fas fa-table"></i>
+                    Specifications
+                </a>
+            @endcan
+
+            @can('capability_process_access')
+                <a href="{{ route('admin.capability-processes.index') }}"
+                   class="sub-link {{ request()->is('admin/capability-processes*') ? 'active' : '' }}">
+                    <i class="fas fa-project-diagram"></i>
+                    Process Steps
+                </a>
+            @endcan
+
+        </div>
+    </div>
+@endcan
+
         <div class="nav-divider"></div>
 
         <p class="sidebar-section-title compact nav-label">Account</p>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frontend\ProductPageController;
 use App\Http\Controllers\Frontend\AboutPageController as FrontendAboutPageController;
+use App\Http\Controllers\Frontend\CapabilityPageController as FrontendCapabilityPageController;
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
@@ -36,10 +37,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
         Route::delete('products/gallery-image/{media}', [ProductController::class, 'deleteGalleryImage'])
             ->name('products.gallery-image.delete');
-
+// About Pages
             Route::resource('about-pages', AboutPageController::class);
         Route::resource('about-timelines', AboutTimelineController::class);
         Route::resource('about-features', AboutFeatureController::class);
+// Capability Pages
+         Route::resource('capability-pages', CapabilityPageController::class);
+        Route::resource('capabilities', CapabilityController::class);
+        Route::resource('capability-specs', CapabilitySpecController::class);
+        Route::resource('capability-processes', CapabilityProcessController::class);
 
     
 });
@@ -63,5 +69,7 @@ Route::get('/products/{slug}', [ProductPageController::class, 'show'])
     ->name('products.show');
 
 Route::get('/about', [FrontendAboutPageController::class, 'index'])->name('about');
+
+Route::get('/capabilities', [FrontendCapabilityPageController::class, 'index'])->name('capabilities');
 
 
