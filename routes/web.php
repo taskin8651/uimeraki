@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\ProductPageController;
 use App\Http\Controllers\Frontend\AboutPageController as FrontendAboutPageController;
 use App\Http\Controllers\Frontend\CapabilityPageController as FrontendCapabilityPageController;
+use App\Http\Controllers\Frontend\IndustryPageController as FrontendIndustryPageController;
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
@@ -47,6 +48,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::resource('capability-specs', CapabilitySpecController::class);
         Route::resource('capability-processes', CapabilityProcessController::class);
 
+        // Industry Pages
+           Route::resource('industry-pages', IndustryPageController::class);
+        Route::resource('industries', IndustryController::class);
+
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -71,5 +76,7 @@ Route::get('/products/{slug}', [ProductPageController::class, 'show'])
 Route::get('/about', [FrontendAboutPageController::class, 'index'])->name('about');
 
 Route::get('/capabilities', [FrontendCapabilityPageController::class, 'index'])->name('capabilities');
+
+Route::get('/industries', [FrontendIndustryPageController::class, 'index'])->name('industries.index');
 
 

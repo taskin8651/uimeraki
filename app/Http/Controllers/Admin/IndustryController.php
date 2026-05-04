@@ -3,63 +3,125 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Industry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class IndustryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $industries = Industry::with('media')
+            ->orderBy('sort_order')
+            ->latest()
+            ->get();
+
+        return view('admin.industries.index', compact('industries'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.industries.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'slug'        => 'nullable|string|max:255|unique:industries,slug',
+            'description' => 'nullable|string',
+            'badge_icon'  => 'nullable|string|max:255',
+            'badge_text'  => 'nullable|string|max:255',
+            'tags'        => 'nullable|string',
+            'sort_order'  => 'nullable|integer|min:0',
+            'status'      => 'nullable|boolean',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+        ]);
+
+        $industry = Industry::create([
+            'title'       => $request->title,
+            'slug'        => $request->slug ? Str::slug($request->slug) : Str::slug($request->title),
+            'description' => $request->description,
+            'badge_icon'  => $request->badge_icon,
+            'badge_text'  => $request->badge_text,
+            'tags'        => $request->tags,
+            'sort_order'  => $request->sort_order ?? 0,
+            'status'      => $request->has('status') ? 1 : 0,
+        ]);
+
+        if ($request->hasFile('image')) {
+            $industry
+                ->addMediaFromRequest('image')
+                ->toMediaCollection('industry_image');
+        }
+
+        return redirect()
+            ->route('admin.industries.index')
+            ->with('success', 'Industry created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Industry $industry)
     {
-        //
+        $industry->load('media');
+
+        return view('admin.industries.show', compact('industry'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Industry $industry)
     {
-        //
+        $industry->load('media');
+
+        return view('admin.industries.edit', compact('industry'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Industry $industry)
     {
-        //
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'slug'        => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('industries', 'slug')->ignore($industry->id),
+            ],
+            'description' => 'nullable|string',
+            'badge_icon'  => 'nullable|string|max:255',
+            'badge_text'  => 'nullable|string|max:255',
+            'tags'        => 'nullable|string',
+            'sort_order'  => 'nullable|integer|min:0',
+            'status'      => 'nullable|boolean',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+        ]);
+
+        $industry->update([
+            'title'       => $request->title,
+            'slug'        => $request->slug ? Str::slug($request->slug) : Str::slug($request->title),
+            'description' => $request->description,
+            'badge_icon'  => $request->badge_icon,
+            'badge_text'  => $request->badge_text,
+            'tags'        => $request->tags,
+            'sort_order'  => $request->sort_order ?? 0,
+            'status'      => $request->has('status') ? 1 : 0,
+        ]);
+
+        if ($request->hasFile('image')) {
+            $industry
+                ->addMediaFromRequest('image')
+                ->toMediaCollection('industry_image');
+        }
+
+        return redirect()
+            ->route('admin.industries.index')
+            ->with('success', 'Industry updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Industry $industry)
     {
-        //
+        $industry->delete();
+
+        return redirect()
+            ->route('admin.industries.index')
+            ->with('success', 'Industry deleted successfully.');
     }
 }

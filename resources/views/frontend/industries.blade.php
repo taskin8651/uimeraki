@@ -1,178 +1,168 @@
 @extends('frontend.master')
 
+@section('title', 'Industries — Meraki Foils')
+
 @section('content')
 
+<div class="ind-page">
+  
 
-  <!-- ============= Industries Hero (Unique for this page) ============= -->
-  <section class="ind-hero">
+<!-- ============= Industries Hero (Dynamic) ============= -->
+<section class=" ind-hero">
     <div class="ind-heroGrid"></div>
+
     <div class="container position-relative">
-      <div class="row align-items-center g-4 g-lg-5">
-        <!-- Copy -->
-        <div class="col-lg-6">
-          <span class="ind-eyebrow">
-            Industries We Serve
-            <span class="ind-dot"></span>
-          </span>
-          <h1 class="ind-title display-5 mt-2">
-            Foils tailored<br class="d-none d-md-inline">
-            for <span class="gradient-text">every sector.</span>
-          </h1>
-          <p class="ind-lead mt-2">
-            Precision-engineered aluminium foils for pharmaceuticals, food &amp; dairy, cosmetics, and confectionery—each optimised for barrier, print, and seal.
-          </p>
+        <div class="row align-items-center g-4 g-lg-5">
 
-          <div class="d-flex flex-wrap gap-2 mt-3">
-            <span class="ind-chip"><i class="bi bi-capsule-pill"></i><span>Pharma</span></span>
-            <span class="ind-chip"><i class="bi bi-basket2"></i><span>Food &amp; Dairy</span></span>
-            <span class="ind-chip"><i class="bi bi-brush"></i><span>Cosmetics</span></span>
-            <span class="ind-chip"><i class="bi bi-cup-hot"></i><span>Confectionery</span></span>
-          </div>
-        </div>
+            <!-- Copy -->
+            <div class="col-lg-6">
+                <span class="ind-eyebrow">
+                    {{ $industryPage->hero_eyebrow ?? 'Industries We Serve' }}
+                    <span class="ind-dot"></span>
+                </span>
 
-        <!-- Visual -->
-        <div class="col-lg-6">
-          <div class="ratio ratio-16x9 rounded-4 overflow-hidden border border-light-subtle">
-            <img src="assets/img/industries/hero.png" alt="Industries overview" class="object-cover w-100 h-100">
-          </div>
+                <h1 class="ind-title display-5 mt-2">
+                    {{ $industryPage->hero_title ?? 'Foils tailored' }}<br class="d-none d-md-inline">
+                    for <span class="gradient-text">{{ $industryPage->hero_highlight ?? 'every sector.' }}</span>
+                </h1>
+
+                @if($industryPage->hero_description)
+                    <p class="ind-lead mt-2">
+                        {{ $industryPage->hero_description }}
+                    </p>
+                @endif
+
+                @if(count($industryPage->hero_chips_array))
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        @foreach($industryPage->hero_chips_array as $chip)
+                            <span class="ind-chip">
+                                <i class="bi bi-check2-circle"></i>
+                                <span>{{ $chip }}</span>
+                            </span>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            <!-- Visual -->
+            <div class="col-lg-6">
+                <div class="ratio ratio-16x9 rounded-4 overflow-hidden border border-light-subtle">
+                    <img src="{{ $industryPage->hero_image_url }}"
+                         alt="{{ $industryPage->hero_eyebrow ?? 'Industries overview' }}"
+                         class="object-cover w-100 h-100">
+                </div>
+            </div>
+
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
 
-  <!-- ============= Industries Grid ============= -->
-  <section id="industries" class="section bg-light">
+<!-- ============= Industries Grid (Dynamic) ============= -->
+<section id="industries" class="section bg-light">
     <div class="container">
-      <!-- Head -->
-      <div class="ind-sectionHead text-center mb-4 mb-lg-5">
-        <span class="ind-eyebrow d-inline-flex align-items-center justify-content-center gap-2">
-          Applications
-          <span class="ind-dot"></span>
-        </span>
-        <h2 class="display-6 fw-semibold mt-2">Industries We Serve</h2>
-        <p class="text-secondary mb-0">Diverse markets, one trusted material.</p>
-      </div>
 
-      <!-- Grid -->
-      <div class="row g-4">
-        <!-- Pharma -->
-        <div class="col-sm-6 col-lg-3">
-          <article class="ind-card h-100">
-            <div class="ind-cardMedia">
-              <div class="ratio ratio-1x1">
-                <img src="assets/img/industries/pharma.png" alt="Pharmaceuticals" class="w-100 h-100 object-cover">
-              </div>
-              <span class="ind-badge"><i class="bi bi-capsule-pill me-1"></i>Pharma</span>
-              <span class="ind-sheen"></span>
-            </div>
-            <div class="ind-cardBody">
-              <h3 class="h5 mb-1">Pharmaceuticals</h3>
-              <p class="text-secondary small mb-2">
-                Blister &amp; strip foils designed for moisture, light and oxygen barrier with consistent sealability.
-              </p>
-              <div class="ind-tags">
-                <span class="ind-tag">Hard/Soft alu</span>
-                <span class="ind-tag">20–30µ</span>
-                <span class="ind-tag">cGMP aligned</span>
-              </div>
-            </div>
-          </article>
+        <!-- Head -->
+        <div class="ind-sectionHead text-center mb-4 mb-lg-5">
+            <span class="ind-eyebrow d-inline-flex align-items-center justify-content-center gap-2">
+                {{ $industryPage->section_eyebrow ?? 'Applications' }}
+                <span class="ind-dot"></span>
+            </span>
+
+            <h2 class="display-6 fw-semibold mt-2">
+                {{ $industryPage->section_title ?? 'Industries We Serve' }}
+            </h2>
+
+            @if($industryPage->section_description)
+                <p class="text-secondary mb-0">
+                    {{ $industryPage->section_description }}
+                </p>
+            @endif
         </div>
 
-        <!-- Food & Dairy -->
-        <div class="col-sm-6 col-lg-3">
-          <article class="ind-card h-100">
-            <div class="ind-cardMedia">
-              <div class="ratio ratio-1x1">
-                <img src="assets/img/industries/food-dairy.png" alt="Food and Dairy" class="w-100 h-100 object-cover">
-              </div>
-              <span class="ind-badge"><i class="bi bi-basket2 me-1"></i>Food &amp; Dairy</span>
-              <span class="ind-sheen"></span>
-            </div>
-            <div class="ind-cardBody">
-              <h3 class="h5 mb-1">Food &amp; Dairy</h3>
-              <p class="text-secondary small mb-2">
-                Lidding foils for cups, tubs &amp; trays with tuned peel, seal and hygiene performance.
-              </p>
-              <div class="ind-tags">
-                <span class="ind-tag">HSL / Primer</span>
-                <span class="ind-tag">Emboss / print</span>
-                <span class="ind-tag">High barrier</span>
-              </div>
-            </div>
-          </article>
+        <!-- Grid -->
+        <div class="row g-4">
+            @forelse($industries as $industry)
+                <div class="col-sm-6 col-lg-3">
+                    <article class="ind-card h-100">
+
+                        <div class="ind-cardMedia">
+                                <div class="ratio ratio-1x1">
+                                    <img src="{{ $industry->image_url }}"
+                                         alt="{{ $industry->title }}"
+                                         class="w-100 h-100 object-cover">
+                                </div>
+
+                            @if($industry->badge_text)
+                                <span class="ind-badge">
+                                    @if($industry->badge_icon)
+                                        <i class="{{ $industry->badge_icon }} me-1"></i>
+                                    @else
+                                        <i class="bi bi-check2-circle me-1"></i>
+                                    @endif
+                                    {{ $industry->badge_text }}
+                                </span>
+                            @endif
+
+                            <span class="ind-sheen"></span>
+                        </div>
+
+                        <div class="ind-cardBody">
+                            <h3 class="h5 mb-1">
+
+                                    {{ $industry->title }}
+                            </h3>
+
+                            @if($industry->description)
+                                <p class="text-secondary small mb-2">
+                                    {{ $industry->description }}
+                                </p>
+                            @endif
+
+                            @if(count($industry->tags_array))
+                                <div class="ind-tags">
+                                    @foreach($industry->tags_array as $tag)
+                                        <span class="ind-tag">{{ $tag }}</span>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                    </article>
+                </div>
+            @empty
+                <div class="col-12">
+                    <div class="ind-highlight text-center">
+                        <h4 class="fw-semibold mb-1">No industries found</h4>
+                        <p class="text-secondary mb-0">
+                            Industries will appear here after adding them from admin panel.
+                        </p>
+                    </div>
+                </div>
+            @endforelse
         </div>
 
-        <!-- Cosmetics -->
-        <div class="col-sm-6 col-lg-3">
-          <article class="ind-card h-100">
-            <div class="ind-cardMedia">
-              <div class="ratio ratio-1x1">
-                <img src="assets/img/industries/cosmetics.png" alt="Cosmetics" class="w-100 h-100 object-cover">
-              </div>
-              <span class="ind-badge"><i class="bi bi-brush me-1"></i>Cosmetics</span>
-              <span class="ind-sheen"></span>
+        <!-- Highlight strip -->
+        <div class="ind-highlight mt-5">
+            <div class="row align-items-center g-3">
+                <div class="col-lg-8">
+                    <h4 class="fw-semibold mb-1">Have a niche application?</h4>
+                    <p class="text-secondary mb-0">
+                        We also co-develop foil structures for medical devices, nutraceuticals, specialty foods and more.
+                    </p>
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+                    <a href="{{ url('/#rfq') }}" class="btn btn-gradient rounded-pill px-4">
+                        Discuss Your Application
+                    </a>
+                </div>
             </div>
-            <div class="ind-cardBody">
-              <h3 class="h5 mb-1">Cosmetics</h3>
-              <p class="text-secondary small mb-2">
-                Sachets &amp; closures with premium finishes, barrier, and compatibility with aggressive formulations.
-              </p>
-              <div class="ind-tags">
-                <span class="ind-tag">2–3 ply</span>
-                <span class="ind-tag">Foil + films</span>
-                <span class="ind-tag">Custom widths</span>
-              </div>
-            </div>
-          </article>
         </div>
 
-        <!-- Confectionery -->
-        <div class="col-sm-6 col-lg-3">
-          <article class="ind-card h-100">
-            <div class="ind-cardMedia">
-              <div class="ratio ratio-1x1">
-                <img src="assets/img/industries/chocolate.png" alt="Confectionery" class="w-100 h-100 object-cover">
-              </div>
-              <span class="ind-badge"><i class="bi bi-cup-hot me-1"></i>Confectionery</span>
-              <span class="ind-sheen"></span>
-            </div>
-            <div class="ind-cardBody">
-              <h3 class="h5 mb-1">Confectionery</h3>
-              <p class="text-secondary small mb-2">
-                Wraps &amp; laminates for chocolates and sweets, balancing twist, barrier and shelf appeal.
-              </p>
-              <div class="ind-tags">
-                <span class="ind-tag">Wraps</span>
-                <span class="ind-tag">Emboss options</span>
-                <span class="ind-tag">Print up to 6 colors</span>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-
-    
     </div>
-  </section>
+</section>
 
-    <!-- Highlight strip -->
-      <div class="ind-highlight mt-5">
-        <div class="row align-items-center g-3">
-          <div class="col-lg-8">
-            <h4 class="fw-semibold mb-1">Have a niche application?</h4>
-            <p class="text-secondary mb-0">
-              We also co-develop foil structures for medical devices, nutraceuticals, specialty foods and more.
-            </p>
-          </div>
-          <div class="col-lg-4 text-lg-end">
-            <a href="index.html#rfq" class="btn btn-gradient rounded-pill px-4">
-              Discuss Your Application
-            </a>
-          </div>
-        </div>
-      </div>
 
 
 
@@ -442,4 +432,4 @@
     </div>
   </section>
 
-  @endsection
+@endsection

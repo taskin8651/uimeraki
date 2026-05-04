@@ -292,6 +292,58 @@
     </div>
 @endcan
 
+{{-- INDUSTRY MANAGEMENT GROUP --}}
+@can('industry_management_access')
+    @php
+        $industryActive = request()->is('admin/industry-pages*')
+            || request()->is('admin/industries*');
+    @endphp
+
+    <div x-data="{ open: {{ $industryActive ? 'true' : 'false' }} }">
+
+        <button type="button"
+                @click="open = !open"
+                data-tooltip="Industries"
+                class="nav-link nav-group-btn {{ $industryActive ? 'active' : '' }}">
+
+            <div class="nav-group-left">
+                <i class="fas fa-building nav-icon"></i>
+                <span class="nav-label">Industry Management</span>
+            </div>
+
+            <i class="fas fa-chevron-right chevron"
+               :style="open ? 'transform:rotate(90deg)' : ''"></i>
+        </button>
+
+        <div class="submenu"
+             x-show="open"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-1"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-1">
+
+            @can('industry_page_access')
+                <a href="{{ route('admin.industry-pages.index') }}"
+                   class="sub-link {{ request()->is('admin/industry-pages*') ? 'active' : '' }}">
+                    <i class="fas fa-file-alt"></i>
+                    Industry Page
+                </a>
+            @endcan
+
+            @can('industry_access')
+                <a href="{{ route('admin.industries.index') }}"
+                   class="sub-link {{ request()->is('admin/industries*') ? 'active' : '' }}">
+                    <i class="fas fa-th-large"></i>
+                    Industries
+                </a>
+            @endcan
+
+        </div>
+    </div>
+@endcan
+
         <div class="nav-divider"></div>
 
         <p class="sidebar-section-title compact nav-label">Account</p>
