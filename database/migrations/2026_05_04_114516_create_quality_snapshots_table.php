@@ -6,20 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('quality_snapshots', function (Blueprint $table) {
             $table->id();
+
+            $table->string('title');
+            $table->text('description')->nullable();
+
+            $table->unsignedInteger('sort_order')->default(0);
+            $table->boolean('status')->default(1);
+
             $table->timestamps();
+
+            $table->index(['sort_order', 'status']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('quality_snapshots');

@@ -344,6 +344,76 @@
     </div>
 @endcan
 
+{{-- QUALITY MANAGEMENT GROUP --}}
+@can('quality_management_access')
+    @php
+        $qualityActive = request()->is('admin/quality-pages*')
+            || request()->is('admin/quality-snapshots*')
+            || request()->is('admin/quality-pillars*')
+            || request()->is('admin/quality-processes*');
+    @endphp
+
+    <div x-data="{ open: {{ $qualityActive ? 'true' : 'false' }} }">
+
+        <button type="button"
+                @click="open = !open"
+                data-tooltip="Quality"
+                class="nav-link nav-group-btn {{ $qualityActive ? 'active' : '' }}">
+
+            <div class="nav-group-left">
+                <i class="fas fa-award nav-icon"></i>
+                <span class="nav-label">Quality Management</span>
+            </div>
+
+            <i class="fas fa-chevron-right chevron"
+               :style="open ? 'transform:rotate(90deg)' : ''"></i>
+        </button>
+
+        <div class="submenu"
+             x-show="open"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-1"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-1">
+
+            @can('quality_page_access')
+                <a href="{{ route('admin.quality-pages.index') }}"
+                   class="sub-link {{ request()->is('admin/quality-pages*') ? 'active' : '' }}">
+                    <i class="fas fa-file-alt"></i>
+                    Quality Page
+                </a>
+            @endcan
+
+            @can('quality_snapshot_access')
+                <a href="{{ route('admin.quality-snapshots.index') }}"
+                   class="sub-link {{ request()->is('admin/quality-snapshots*') ? 'active' : '' }}">
+                    <i class="fas fa-clipboard-check"></i>
+                    QA Snapshots
+                </a>
+            @endcan
+
+            @can('quality_pillar_access')
+                <a href="{{ route('admin.quality-pillars.index') }}"
+                   class="sub-link {{ request()->is('admin/quality-pillars*') ? 'active' : '' }}">
+                    <i class="fas fa-shield-alt"></i>
+                    Quality Pillars
+                </a>
+            @endcan
+
+            @can('quality_process_access')
+                <a href="{{ route('admin.quality-processes.index') }}"
+                   class="sub-link {{ request()->is('admin/quality-processes*') ? 'active' : '' }}">
+                    <i class="fas fa-project-diagram"></i>
+                    QA Process
+                </a>
+            @endcan
+
+        </div>
+    </div>
+@endcan
+
         <div class="nav-divider"></div>
 
         <p class="sidebar-section-title compact nav-label">Account</p>

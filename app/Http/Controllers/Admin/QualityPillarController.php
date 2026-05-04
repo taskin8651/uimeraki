@@ -3,63 +3,91 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\QualityPillar;
 use Illuminate\Http\Request;
 
 class QualityPillarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $pillars = QualityPillar::orderBy('sort_order')
+            ->latest()
+            ->get();
+
+        return view('admin.quality-pillars.index', compact('pillars'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.quality-pillars.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'icon'        => 'nullable|string|max:255',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'points'      => 'nullable|string',
+            'sort_order'  => 'nullable|integer|min:0',
+            'status'      => 'nullable|boolean',
+        ]);
+
+        QualityPillar::create([
+            'icon'        => $request->icon,
+            'title'       => $request->title,
+            'description' => $request->description,
+            'points'      => $request->points,
+            'sort_order'  => $request->sort_order ?? 0,
+            'status'      => $request->has('status') ? 1 : 0,
+        ]);
+
+        return redirect()
+            ->route('admin.quality-pillars.index')
+            ->with('success', 'Quality pillar created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(QualityPillar $qualityPillar)
     {
-        //
+        return view('admin.quality-pillars.show', compact('qualityPillar'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(QualityPillar $qualityPillar)
     {
-        //
+        return view('admin.quality-pillars.edit', compact('qualityPillar'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, QualityPillar $qualityPillar)
     {
-        //
+        $request->validate([
+            'icon'        => 'nullable|string|max:255',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'points'      => 'nullable|string',
+            'sort_order'  => 'nullable|integer|min:0',
+            'status'      => 'nullable|boolean',
+        ]);
+
+        $qualityPillar->update([
+            'icon'        => $request->icon,
+            'title'       => $request->title,
+            'description' => $request->description,
+            'points'      => $request->points,
+            'sort_order'  => $request->sort_order ?? 0,
+            'status'      => $request->has('status') ? 1 : 0,
+        ]);
+
+        return redirect()
+            ->route('admin.quality-pillars.index')
+            ->with('success', 'Quality pillar updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(QualityPillar $qualityPillar)
     {
-        //
+        $qualityPillar->delete();
+
+        return redirect()
+            ->route('admin.quality-pillars.index')
+            ->with('success', 'Quality pillar deleted successfully.');
     }
 }

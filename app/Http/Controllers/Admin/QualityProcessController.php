@@ -3,63 +3,91 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\QualityProcess;
 use Illuminate\Http\Request;
 
 class QualityProcessController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $processes = QualityProcess::orderBy('sort_order')
+            ->latest()
+            ->get();
+
+        return view('admin.quality-processes.index', compact('processes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.quality-processes.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'icon'        => 'nullable|string|max:255',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'points'      => 'nullable|string',
+            'sort_order'  => 'nullable|integer|min:0',
+            'status'      => 'nullable|boolean',
+        ]);
+
+        QualityProcess::create([
+            'icon'        => $request->icon,
+            'title'       => $request->title,
+            'description' => $request->description,
+            'points'      => $request->points,
+            'sort_order'  => $request->sort_order ?? 0,
+            'status'      => $request->has('status') ? 1 : 0,
+        ]);
+
+        return redirect()
+            ->route('admin.quality-processes.index')
+            ->with('success', 'Quality process step created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(QualityProcess $qualityProcess)
     {
-        //
+        return view('admin.quality-processes.show', compact('qualityProcess'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(QualityProcess $qualityProcess)
     {
-        //
+        return view('admin.quality-processes.edit', compact('qualityProcess'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, QualityProcess $qualityProcess)
     {
-        //
+        $request->validate([
+            'icon'        => 'nullable|string|max:255',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'points'      => 'nullable|string',
+            'sort_order'  => 'nullable|integer|min:0',
+            'status'      => 'nullable|boolean',
+        ]);
+
+        $qualityProcess->update([
+            'icon'        => $request->icon,
+            'title'       => $request->title,
+            'description' => $request->description,
+            'points'      => $request->points,
+            'sort_order'  => $request->sort_order ?? 0,
+            'status'      => $request->has('status') ? 1 : 0,
+        ]);
+
+        return redirect()
+            ->route('admin.quality-processes.index')
+            ->with('success', 'Quality process step updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(QualityProcess $qualityProcess)
     {
-        //
+        $qualityProcess->delete();
+
+        return redirect()
+            ->route('admin.quality-processes.index')
+            ->with('success', 'Quality process step deleted successfully.');
     }
 }
