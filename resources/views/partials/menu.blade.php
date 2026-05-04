@@ -108,6 +108,58 @@
             </div>
         @endcan
 
+        {{-- PRODUCT MANAGEMENT GROUP --}}
+@can('product_management_access')
+    @php
+        $pmActive = request()->is('admin/product-categories*')
+            || request()->is('admin/products*');
+    @endphp
+
+    <div x-data="{ open: {{ $pmActive ? 'true' : 'false' }} }">
+
+        <button type="button"
+                @click="open = !open"
+                data-tooltip="Products"
+                class="nav-link nav-group-btn {{ $pmActive ? 'active' : '' }}">
+
+            <div class="nav-group-left">
+                <i class="fas fa-boxes nav-icon"></i>
+                <span class="nav-label">Product Management</span>
+            </div>
+
+            <i class="fas fa-chevron-right chevron"
+               :style="open ? 'transform:rotate(90deg)' : ''"></i>
+        </button>
+
+        <div class="submenu"
+             x-show="open"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-1"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-1">
+
+            @can('product_category_access')
+                <a href="{{ route('admin.product-categories.index') }}"
+                   class="sub-link {{ request()->is('admin/product-categories*') ? 'active' : '' }}">
+                    <i class="fas fa-layer-group"></i>
+                    Product Categories
+                </a>
+            @endcan
+
+            @can('product_access')
+                <a href="{{ route('admin.products.index') }}"
+                   class="sub-link {{ request()->is('admin/products*') ? 'active' : '' }}">
+                    <i class="fas fa-box-open"></i>
+                    Products
+                </a>
+            @endcan
+
+        </div>
+    </div>
+@endcan
+
         <div class="nav-divider"></div>
 
         <p class="sidebar-section-title compact nav-label">Account</p>

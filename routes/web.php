@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Frontend\ProductPageController;
+
 Route::redirect('/', '/login');
 Route::get('/home', function () {
     if (session('status')) {
@@ -28,6 +30,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
+  Route::resource('product-categories', ProductCategoryController::class);
+        Route::resource('products', ProductController::class);
+
+        Route::delete('products/gallery-image/{media}', [ProductController::class, 'deleteGalleryImage'])
+            ->name('products.gallery-image.delete');
+
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -39,4 +47,14 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
     }
 });
+
+
+// Frontend routes
+
+Route::get('/products', [ProductPageController::class, 'index'])
+    ->name('products.index');
+
+Route::get('/products/{slug}', [ProductPageController::class, 'show'])
+    ->name('products.show');
+
 
