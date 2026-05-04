@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\ProductPageController;
+use App\Http\Controllers\Frontend\AboutPageController as FrontendAboutPageController;
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
@@ -36,6 +37,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::delete('products/gallery-image/{media}', [ProductController::class, 'deleteGalleryImage'])
             ->name('products.gallery-image.delete');
 
+            Route::resource('about-pages', AboutPageController::class);
+        Route::resource('about-timelines', AboutTimelineController::class);
+        Route::resource('about-features', AboutFeatureController::class);
+
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -56,5 +61,7 @@ Route::get('/products', [ProductPageController::class, 'index'])
 
 Route::get('/products/{slug}', [ProductPageController::class, 'show'])
     ->name('products.show');
+
+Route::get('/about', [FrontendAboutPageController::class, 'index'])->name('about');
 
 
