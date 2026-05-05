@@ -27,7 +27,7 @@
 
         <div class="d-flex flex-wrap gap-2 mt-3">
           <a href="#rfq" class="btn btn-gradient px-4 py-2 rounded-pill">Get a Quote</a>
-          <a href="products.html" class="btn btn-outline-dark px-4 py-2 rounded-pill">Explore Products</a>
+          <a href="{{ route('products.index') }}" class="btn btn-outline-dark px-4 py-2 rounded-pill">Explore Products</a>
         </div>
 
         <!-- Chips -->

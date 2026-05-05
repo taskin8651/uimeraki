@@ -359,10 +359,10 @@
           </div>
           <div class="col-lg-4 text-lg-end">
             <div class="d-flex justify-content-lg-end justify-content-start gap-2">
-              <a href="index.html#rfq" class="btn btn-gradient rounded-pill">
+              <a href="/#rfq" class="btn btn-gradient rounded-pill">
                 Request a spec consult
               </a>
-              <a href="index.html#contact" class="btn btn-outline-dark rounded-pill">
+              <a href="{{ route('contact') }}" class="btn btn-outline-dark rounded-pill">
                 Contact team
               </a>
             </div>
