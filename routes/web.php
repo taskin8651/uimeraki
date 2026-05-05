@@ -6,6 +6,7 @@ use App\Http\Controllers\Frontend\CapabilityPageController as FrontendCapability
 use App\Http\Controllers\Frontend\IndustryPageController as FrontendIndustryPageController;
 use App\Http\Controllers\Frontend\QualityPageController as FrontendQualityPageController;
 use App\Http\Controllers\Frontend\ResourcePageController as FrontendResourcePageController;
+use App\Http\Controllers\Admin\WebsiteSettingController;
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
@@ -64,6 +65,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::resource('resource-pages', ResourcePageController::class);
         Route::resource('resource-categories', ResourceCategoryController::class);
         Route::resource('resources', ResourceController::class);
+
+        // Contact Page
+        Route::get('website-settings', [WebsiteSettingController::class, 'index'])
+    ->name('website-settings.index');
+
+Route::put('website-settings/{websiteSetting}', [WebsiteSettingController::class, 'update'])
+    ->name('website-settings.update');
 
     
 });

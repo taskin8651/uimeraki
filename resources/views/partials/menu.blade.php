@@ -493,13 +493,48 @@
             @endcan
         @endif
 
-        {{-- Settings --}}
-        <a href="#"
-           data-tooltip="Settings"
-           class="nav-link">
-            <i class="fas fa-cog nav-icon"></i>
-            <span class="nav-label">Settings</span>
-        </a>
+       {{-- SETTINGS GROUP --}}
+@can('website_setting_access')
+    @php
+        $settingsActive = request()->is('admin/website-settings*');
+    @endphp
+
+    <div x-data="{ open: {{ $settingsActive ? 'true' : 'false' }} }">
+
+        <button type="button"
+                @click="open = !open"
+                data-tooltip="Settings"
+                class="nav-link nav-group-btn {{ $settingsActive ? 'active' : '' }}">
+
+            <div class="nav-group-left">
+                <i class="fas fa-cog nav-icon"></i>
+                <span class="nav-label">Settings</span>
+            </div>
+
+            <i class="fas fa-chevron-right chevron"
+               :style="open ? 'transform:rotate(90deg)' : ''"></i>
+        </button>
+
+        <div class="submenu"
+             x-show="open"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-1"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-1">
+
+            @can('website_setting_access')
+                <a href="{{ route('admin.website-settings.index') }}"
+                   class="sub-link {{ request()->is('admin/website-settings*') ? 'active' : '' }}">
+                    <i class="fas fa-globe"></i>
+                    Website Settings
+                </a>
+            @endcan
+
+        </div>
+    </div>
+@endcan
 
     </nav>
 
