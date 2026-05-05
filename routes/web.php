@@ -7,6 +7,8 @@ use App\Http\Controllers\Frontend\IndustryPageController as FrontendIndustryPage
 use App\Http\Controllers\Frontend\QualityPageController as FrontendQualityPageController;
 use App\Http\Controllers\Frontend\ResourcePageController as FrontendResourcePageController;
 use App\Http\Controllers\Admin\WebsiteSettingController;
+use App\Http\Controllers\Frontend\EnquiryController;
+use App\Http\Controllers\Frontend\IndexController;
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
@@ -73,6 +75,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 Route::put('website-settings/{websiteSetting}', [WebsiteSettingController::class, 'update'])
     ->name('website-settings.update');
 
+    Route::resource('faqs', FaqController::class)->except(['show']);
+
+    // Partners
+    Route::resource('partners', PartnerController::class)->except(['show']);
+
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -87,6 +94,8 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
 
 
 // Frontend routes
+
+Route::get('/', [IndexController::class, 'index'])->name('home'); 
 
 Route::get('/products', [ProductPageController::class, 'index'])
     ->name('products.index');
@@ -107,3 +116,6 @@ Route::get('/resources', [FrontendResourcePageController::class, 'index'])->name
 
 Route::get('/resources/{slug}', [FrontendResourcePageController::class, 'show'])->name('resources.show');
 
+
+Route::get('/contact', [EnquiryController::class, 'index'])->name('contact');
+Route::post('/enquiry-submit', [EnquiryController::class, 'store'])->name('enquiry.store');

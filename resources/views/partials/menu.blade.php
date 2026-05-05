@@ -475,6 +475,24 @@
     </div>
 @endcan
 
+@can('faq_access')
+    <a href="{{ route('admin.faqs.index') }}"
+       data-tooltip="FAQs"
+       class="nav-link {{ request()->is('admin/faqs*') ? 'active' : '' }}">
+        <i class="fas fa-question-circle nav-icon"></i>
+        <span class="nav-label">FAQs</span>
+    </a>
+@endcan
+
+@can('partner_access')
+    <a href="{{ route('admin.partners.index') }}"
+       data-tooltip="Partners"
+       class="nav-link {{ request()->is('admin/partners*') ? 'active' : '' }}">
+        <i class="fas fa-handshake nav-icon"></i>
+        <span class="nav-label">Partners</span>
+    </a>
+@endcan
+
 
 
         <div class="nav-divider"></div>
