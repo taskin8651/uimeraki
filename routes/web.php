@@ -5,6 +5,7 @@ use App\Http\Controllers\Frontend\AboutPageController as FrontendAboutPageContro
 use App\Http\Controllers\Frontend\CapabilityPageController as FrontendCapabilityPageController;
 use App\Http\Controllers\Frontend\IndustryPageController as FrontendIndustryPageController;
 use App\Http\Controllers\Frontend\QualityPageController as FrontendQualityPageController;
+use App\Http\Controllers\Frontend\ResourcePageController as FrontendResourcePageController;
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
@@ -59,6 +60,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
         Route::resource('quality-pillars', QualityPillarController::class);
         Route::resource('quality-processes', QualityProcessController::class);
 
+        // Resource Pages
+        Route::resource('resource-pages', ResourcePageController::class);
+        Route::resource('resource-categories', ResourceCategoryController::class);
+        Route::resource('resources', ResourceController::class);
+
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
@@ -89,4 +95,7 @@ Route::get('/industries', [FrontendIndustryPageController::class, 'index'])->nam
 
 Route::get('/quality', [FrontendQualityPageController::class, 'index'])->name('quality');
 
+Route::get('/resources', [FrontendResourcePageController::class, 'index'])->name('resources');
+
+Route::get('/resources/{slug}', [FrontendResourcePageController::class, 'show'])->name('resources.show');
 

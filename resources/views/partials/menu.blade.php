@@ -414,6 +414,69 @@
     </div>
 @endcan
 
+{{-- RESOURCE MANAGEMENT GROUP --}}
+@can('resource_management_access')
+    @php
+        $resourceActive = request()->is('admin/resource-pages*')
+            || request()->is('admin/resource-categories*')
+            || request()->is('admin/resources*');
+    @endphp
+
+    <div x-data="{ open: {{ $resourceActive ? 'true' : 'false' }} }">
+
+        <button type="button"
+                @click="open = !open"
+                data-tooltip="Resources"
+                class="nav-link nav-group-btn {{ $resourceActive ? 'active' : '' }}">
+
+            <div class="nav-group-left">
+                <i class="fas fa-book-open nav-icon"></i>
+                <span class="nav-label">Resource Management</span>
+            </div>
+
+            <i class="fas fa-chevron-right chevron"
+               :style="open ? 'transform:rotate(90deg)' : ''"></i>
+        </button>
+
+        <div class="submenu"
+             x-show="open"
+             x-transition:enter="transition ease-out duration-150"
+             x-transition:enter-start="opacity-0 -translate-y-1"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-1">
+
+            @can('resource_page_access')
+                <a href="{{ route('admin.resource-pages.index') }}"
+                   class="sub-link {{ request()->is('admin/resource-pages*') ? 'active' : '' }}">
+                    <i class="fas fa-file-alt"></i>
+                    Resource Page
+                </a>
+            @endcan
+
+            @can('resource_category_access')
+                <a href="{{ route('admin.resource-categories.index') }}"
+                   class="sub-link {{ request()->is('admin/resource-categories*') ? 'active' : '' }}">
+                    <i class="fas fa-tags"></i>
+                    Resource Categories
+                </a>
+            @endcan
+
+            @can('resource_access')
+                <a href="{{ route('admin.resources.index') }}"
+                   class="sub-link {{ request()->is('admin/resources*') ? 'active' : '' }}">
+                    <i class="fas fa-newspaper"></i>
+                    Resources
+                </a>
+            @endcan
+
+        </div>
+    </div>
+@endcan
+
+
+
         <div class="nav-divider"></div>
 
         <p class="sidebar-section-title compact nav-label">Account</p>
