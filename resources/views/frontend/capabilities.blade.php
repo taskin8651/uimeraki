@@ -368,74 +368,205 @@
         <div class="container position-relative">
             <div class="row g-4 align-items-center">
 
-                <div class="col-lg-7 order-2 order-lg-1">
-                    <form class="rfq-card glass p-4 p-md-5 rounded-4 shadow-lg" onsubmit="event.preventDefault()">
-
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
-                            <div class="d-flex align-items-center gap-2 rfq-steps">
-                                <span class="rfq-step active"><span class="dot"></span> Spec</span>
-                                <span class="rfq-divider"></span>
-                                <span class="rfq-step"><span class="dot"></span> Review</span>
-                                <span class="rfq-divider"></span>
-                                <span class="rfq-step"><span class="dot"></span> Quote</span>
-                            </div>
-
-                            <span class="badge rounded-pill text-dark bg-brand-soft fw-semibold">
-                                Avg reply &lt; 24h
-                            </span>
+                 <!-- Form -->
+            <div class="col-lg-7">
+                <div id="mcon-form" class="mcon-form-card rounded-4 shadow-lg border h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h2 class="h4 mb-1">Send us a message</h2>
+                            <p class="small text-secondary mb-0">
+                                Share your application details, specs or questions — we’ll route it to the right team.
+                            </p>
                         </div>
 
+                        <span class="badge rounded-pill mcon-form-badge">
+                            <i class="bi bi-mailbox me-1"></i>
+                            Enquiry form
+                        </span>
+                    </div>
+
+                    @if(session('success'))
+                        <div class="alert alert-success rounded-4 mb-3">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="alert alert-danger rounded-4 mb-3">
+                            <strong>Please fix these errors:</strong>
+
+                            <ul class="mb-0 mt-2">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('enquiry.store') }}">
+                        @csrf
+
                         <div class="row g-3">
+
                             <div class="col-md-6">
-                                <label class="form-label">Name</label>
-                                <div class="fi">
+                                <label class="form-label mcon-form-label">
+                                    Name <span class="text-danger">*</span>
+                                </label>
+
+                                <div class="mcon-fi">
                                     <i class="bi bi-person"></i>
-                                    <input type="text" class="form-control" placeholder="Your name" required>
+                                    <input type="text"
+                                           name="name"
+                                           value="{{ old('name') }}"
+                                           class="form-control"
+                                           placeholder="Your name"
+                                           required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Company</label>
-                                <div class="fi">
+                                <label class="form-label mcon-form-label">Company</label>
+
+                                <div class="mcon-fi">
                                     <i class="bi bi-building"></i>
-                                    <input type="text" class="form-control" placeholder="Company name">
+                                    <input type="text"
+                                           name="company"
+                                           value="{{ old('company') }}"
+                                           class="form-control"
+                                           placeholder="Company name">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <div class="fi">
+                                <label class="form-label mcon-form-label">
+                                    Work email <span class="text-danger">*</span>
+                                </label>
+
+                                <div class="mcon-fi">
                                     <i class="bi bi-envelope"></i>
-                                    <input type="email" class="form-control" placeholder="you@company.com" required>
+                                    <input type="email"
+                                           name="email"
+                                           value="{{ old('email') }}"
+                                           class="form-control"
+                                           placeholder="you@company.com"
+                                           required>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Phone</label>
-                                <div class="fi">
+                                <label class="form-label mcon-form-label">
+                                    Phone (with country code)
+                                </label>
+
+                                <div class="mcon-fi">
                                     <i class="bi bi-telephone"></i>
-                                    <input type="tel" class="form-control" placeholder="+91 …">
+                                    <input type="tel"
+                                           name="phone"
+                                           value="{{ old('phone') }}"
+                                           class="form-control"
+                                           placeholder="+91 …">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label mcon-form-label">Industry</label>
+
+                                <div class="mcon-fi">
+                                    <i class="bi bi-grid-3x3-gap"></i>
+                                    <select name="industry" class="form-select">
+                                        <option value="Pharma" {{ old('industry') == 'Pharma' ? 'selected' : '' }}>Pharma</option>
+                                        <option value="Food & Dairy" {{ old('industry') == 'Food & Dairy' ? 'selected' : '' }}>Food &amp; Dairy</option>
+                                        <option value="Cosmetics" {{ old('industry') == 'Cosmetics' ? 'selected' : '' }}>Cosmetics</option>
+                                        <option value="Confectionery" {{ old('industry') == 'Confectionery' ? 'selected' : '' }}>Confectionery</option>
+                                        <option value="Other" {{ old('industry') == 'Other' ? 'selected' : '' }}>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label mcon-form-label">Enquiry type</label>
+
+                                <div class="mcon-fi">
+                                    <i class="bi bi-ui-checks-grid"></i>
+                                    <select name="enquiry_type" class="form-select">
+                                        <option value="General enquiry" {{ old('enquiry_type') == 'General enquiry' ? 'selected' : '' }}>General enquiry</option>
+                                        <option value="New project / spec" {{ old('enquiry_type') == 'New project / spec' ? 'selected' : '' }}>New project / spec</option>
+                                        <option value="Technical / QA" {{ old('enquiry_type') == 'Technical / QA' ? 'selected' : '' }}>Technical / QA</option>
+                                        <option value="Commercial / pricing" {{ old('enquiry_type') == 'Commercial / pricing' ? 'selected' : '' }}>Commercial / pricing</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="col-12">
-                                <label class="form-label">Spec / Message</label>
-                                <div class="fi fi-textarea">
+                                <label class="form-label mcon-form-label">
+                                    Message / spec details
+                                </label>
+
+                                <div class="mcon-fi mcon-fi-textarea">
                                     <i class="bi bi-journal-text"></i>
-                                    <textarea class="form-control" rows="4" placeholder="Microns, temper, coatings, widths, prints, volumes…"></textarea>
+                                    <textarea name="message"
+                                              class="form-control"
+                                              rows="4"
+                                              placeholder="Microns, temper, coatings, widths, print, line details…">{{ old('message') }}</textarea>
                                 </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label mcon-form-label">Target lead time</label>
+
+                                <div class="mcon-fi">
+                                    <i class="bi bi-hourglass-split"></i>
+                                    <select name="target_lead_time" class="form-select">
+                                        <option value="ASAP" {{ old('target_lead_time') == 'ASAP' ? 'selected' : '' }}>ASAP</option>
+                                        <option value="2–4 weeks" {{ old('target_lead_time') == '2–4 weeks' ? 'selected' : '' }}>2–4 weeks</option>
+                                        <option value="4–6 weeks" {{ old('target_lead_time') == '4–6 weeks' ? 'selected' : '' }}>4–6 weeks</option>
+                                        <option value="Flexible" {{ old('target_lead_time') == 'Flexible' ? 'selected' : '' }}>Flexible</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label mcon-form-label">Expected annual volume</label>
+
+                                <div class="mcon-fi">
+                                    <i class="bi bi-diagram-3"></i>
+                                    <select name="expected_annual_volume" class="form-select">
+                                        <option value="TBD" {{ old('expected_annual_volume') == 'TBD' ? 'selected' : '' }}>TBD</option>
+                                        <option value="< 1 ton" {{ old('expected_annual_volume') == '< 1 ton' ? 'selected' : '' }}>&lt; 1 ton</option>
+                                        <option value="1–5 tons" {{ old('expected_annual_volume') == '1–5 tons' ? 'selected' : '' }}>1–5 tons</option>
+                                        <option value="> 5 tons" {{ old('expected_annual_volume') == '> 5 tons' ? 'selected' : '' }}>&gt; 5 tons</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check mcon-form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="nda_required"
+                                           value="1"
+                                           id="mconNda"
+                                           {{ old('nda_required') ? 'checked' : '' }}>
+
+                                    <label class="form-check-label small" for="mconNda">
+                                        I’d like to discuss under NDA.
+                                    </label>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <button class="btn btn-gradient w-100 mt-3">
-                            {{ $capabilityPage->cta_button_text ?? 'Submit RFQ' }}
+                        <button type="submit" class="btn btn-gradient w-100 mt-3 rounded-pill">
+                            Submit enquiry
                         </button>
 
-                        <p class="text-muted small mt-2 mb-0">
-                            This is a static demo form.
+                        <p class="small text-secondary mt-2 mb-0">
+                            Your details stay private and are only used to respond to your enquiry.
                         </p>
                     </form>
                 </div>
+            </div>
 
                 <div class="col-lg-5 order-1 order-lg-2">
                     <span class="capx-eyebrow text-white-75">

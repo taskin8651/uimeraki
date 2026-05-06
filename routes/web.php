@@ -80,6 +80,9 @@ Route::put('website-settings/{websiteSetting}', [WebsiteSettingController::class
     // Partners
     Route::resource('partners', PartnerController::class)->except(['show']);
 
+    // Enquiries
+    Route::resource('enquiries', EnquiryController::class)->only(['index', 'show', 'destroy']); 
+
     
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
